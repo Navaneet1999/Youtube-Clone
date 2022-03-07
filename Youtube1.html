@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<style>
+    #box{
+        display: grid;
+        grid-template-columns: repeat(4, 20%);
+        grid-gap: 5%;
+
+        justify-content: space-between;
+        margin-top: 5%;
+    }
+    #navbar{
+        height:100px;
+        border: solid 1px black;
+        display: flex;
+        justify-content: space-between;
+    }
+    #search{
+        width: 400px;
+        height: 50px;
+    }
+    #you{
+        width: 90px;
+        height: 40px;
+    }
+    #left , #center, #right > i{
+        margin-left: 8px;
+    }
+</style>
+<body>
+    <div id="navbar">
+        <p id="left">
+            <i class="fas fa-bars fa-3x"></i> 
+            <img id="you" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1280px-YouTube_Logo_2017.svg.png" alt="">
+        </p>
+        <p id="center">
+            <input type="text" id="search">
+            <button onclick="searchMovies()">Search</button>
+            <i class="fas fa-microphone fa-3x"></i>
+        </p>
+        <p id="right">
+            <i class="far fa-plus-square fa-3x"></i>
+            <i class="far fa-bell fa-3x"></i>
+            <i class="far fa-user-circle fa-3x"></i>
+        </p>
+    </div>
+    <div id="box"></div>
+</body>
+</html>
+<script>
+    let key = "AIzaSyCO3_DaNZJcoHuGPNqJ-epDFTCnNeGhybM";
+    let box = document.getElementById("box");
+
+    async function searchMovies(){
+        try {
+      let inp = document.getElementById("search").value;
+      let url = `https://youtube.googleapis.com/youtube/v3/search?q=${inp}&key=${key}&type=video&maxResults=20&part=snippet`;
+
+      let response = await fetch(url);
+
+      let data = await response.json();
+
+      let array_of_videos = data.items;
+      appendVideos(array_of_videos);
+      console.log("data:", data);
+    } catch (err) {
+      console.log("err:", err);
+    }
+
+    }
+    const appendVideos = (arr) => {
+        //console.log("arr:",arr);
+        arr.forEach(({snippet,id:{videoId}}) => {
+            console.log("snippet:",snippet)
+            
+            let div = document.createElement("div");
+            
+            let url = snippet.thumbnails.medium.url;
+
+            let img = document.createElement("img");
+            img.src = url;
+            let title = snippet.title;
+            let h5 = document.createElement("h5");
+            h5.innerText = title;
+
+            let video_data = {
+                snippet,
+                videoId,
+            }
+            
+            div.onclick = () => {
+                showVideo(video_data)
+            };
+
+            div.append(img,h5);
+            box.append(div);
+        });
+    }
+
+    // function showVideo(){
+    //     alert("click video")
+    // }
+    const showVideo = (video_data) => {
+        // console.log("video_data",video_data);
+        
+        localStorage.setItem("clicked_video",JSON.stringify(video_data));
+
+        // window.location.href = "video.html";
+        window.open("video.html");
+    }
+</script>

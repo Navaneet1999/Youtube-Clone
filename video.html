@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<style>
+    #navbar{
+        height:100px;
+        border: solid 1px black;
+        display: flex;
+        justify-content: space-between;
+    }
+    #main{
+        display: flex;
+        border: solid 1px black;
+        margin-top: 10px;
+    }
+    #video_details{
+        flex:3;
+        border: solid 1px black;
+        height: 500px;
+    }
+    #recomendations{
+        flex:1;
+        border: solid 1px black;
+        height: 500px;
+    }
+    #search{
+        width: 400px;
+        height: 50px;
+    }
+    #you{
+        width: 90px;
+        height: 40px;
+    }
+    #left , #center, #right > i{
+        margin-left: 8px;
+    }
+</style>
+<body>
+    <div id="navbar">
+        <p id="left">
+            <i class="fas fa-bars fa-3x"></i> 
+            <img id="you" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1280px-YouTube_Logo_2017.svg.png" alt="">
+        </p>
+        <p id="center">
+            <input type="text" placeholder="Search" id="search"/>
+            <i class="fas fa-search fa-3x"></i>
+            <i class="fas fa-microphone fa-3x"></i>
+        </p>
+        <p id="right">
+            <i class="far fa-plus-square fa-3x"></i>
+            <i class="far fa-bell fa-3x"></i>
+            <i class="far fa-user-circle fa-3x"></i>
+        </p>
+    </div>
+    <div id="main">
+        <div id="video_details"></div>
+        <div id="recomendations"></div>
+    </div>
+</body>
+</html>
+<script>
+    //we need to show video
+    //fecth  "clicked viddeo" data from local strg
+    let video_data = JSON.parse(localStorage.getItem("clicked_video"));
+    console.log("video_data:",video_data);
+
+    let video_div = document.getElementById("video_details");
+
+    let iframe = document.createElement("iframe")
+    iframe.src = `https://www.youtube.com/embed/${video_data.videoId}`;
+    iframe.height = "80%";
+    iframe.width = "80%";
+    iframe.setAttribute("allowfullscreen",true);
+
+    let disc = document.createElement("p");
+    disc.textContent = video_data.snippet.description;
+    console.log("disc:",disc)
+
+    video_div.append(iframe,disc)
+</script>
